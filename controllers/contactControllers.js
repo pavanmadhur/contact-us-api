@@ -83,12 +83,6 @@ const deleteContact = async (req, res) => {
             console.log("Contact not found in DB with ID:", id);
             return res.status(404).json({ message: 'Contact not found' });
         }
-
-        console.log("Contact deleted successfully:", contact);
-        return res.status(200).json({
-            message: 'Contact deleted successfully',
-            deletedContact: contact,
-        });
     } catch (error) {
         console.error('Error deleting contact from DB:', error.message);
         return res.status(500).json({
