@@ -59,5 +59,45 @@ const getAllContacts = async (req, res) => {
     }
 };
 
+// Delete Contact
+const deleteContact = async (req, res) => {
+    console.log("Incoming delete request for ID:", req.params.id);
 
-module.exports = { addContact, getAllContacts };
+    const { id } = req.params;
+
+    // Validate ID format
+    if (!id) {
+        console.log("Validation failed: Missing ID");
+        return res.status(400).json({ message: 'Contact ID is required' });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        console.log("Validation failed: Invalid ID format");
+        return res.status(400).json({ message: 'Invalid Contact ID' });
+    }
+
+    try {
+        const contact = await Contact.findByIdAndDelete(id);
+
+        if (!contact) {
+            console.log("Contact not found in DB with ID:", id);
+            return res.status(404).json({ message: 'Contact not found' });
+        }
+
+        console.log("Contact deleted successfully:", contact);
+        return res.status(200).json({
+            message: 'Contact deleted successfully',
+            deletedContact: contact,
+        });
+    } catch (error) {
+        console.error('Error deleting contact from DB:', error.message);
+        return res.status(500).json({
+            message: 'Server Error',
+            error: error.message,
+        });
+    }
+};
+
+
+
+module.exports = { addContact, getAllContacts, deleteContact};
