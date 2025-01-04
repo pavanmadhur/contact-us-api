@@ -8,22 +8,21 @@ const app = express();
 
 
 
-dotenv.config(); 
+require("dotenv").config(); 
 
 // Middleware
 app.use(express.json());
 app.use(cors());
 
-const mongoURI = "mongodb://localhost:27017/contactUsDB"; // Update this to match your Compass database
+const mongoURI =process.env.MONGO_URI;
 mongoose
-  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(mongoURI)
   .then(() => {
     console.log("Connected to MongoDB");
   })
   .catch((error) => {
     console.error("MongoDB connection error:", error);
-  }
-  )
+  });
 // Example route
 app.get('/', (req, res) => {
   res.send('Hello World');
@@ -34,7 +33,7 @@ app.use('/api/v1/contacts', contactRouter);
 app.use('/api/v1/admin', adminRouter);
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
