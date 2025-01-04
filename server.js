@@ -1,18 +1,18 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const cors =require('cors');
+const cors = require('cors');
+const mongoose =require('mongoose');
 const contactRouter = require('./routes/contactRouter');
 const adminRouter = require('./routes/adminRouter');
-const { errorHandler } = require('./middleware/errorMiddleware');
-
-dotenv.config(); // Load environment variables
-
 const app = express();
 
+
+
+dotenv.config(); 
+
 // Middleware
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
 const mongoURI = "mongodb://localhost:27017/contactUsDB"; // Update this to match your Compass database
 mongoose
@@ -22,24 +22,21 @@ mongoose
   })
   .catch((error) => {
     console.error("MongoDB connection error:", error);
-  });
-
+  }
+  )
+// Example route
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
 
 // Routes
 app.use('/api/v1/contacts', contactRouter);
-app.use('/api/v1/admin', adminRouter); // Added admin login route
-
-app.use((req, res, next) => {
-  console.log(`[${req.method}] ${req.url} - Body:`, req.body);
-  next();
-});
+app.use('/api/v1/admin', adminRouter);
 
 
-
-// Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
 
 
