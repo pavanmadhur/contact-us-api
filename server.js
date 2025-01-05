@@ -20,20 +20,11 @@ app.use(
 );
 
 // MongoDB Connection
-const mongoURI = process.env.MONGO_URI;
-mongoose
-  .connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 30000,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((error) => {
-    console.error("MongoDB connection error:", error);
-    process.exit(1); // Exit process with failure
-  });
+mongoose.connect(process.env.MONGO_URI, {}).then(() => {
+  console.log('Connected to MongoDB');
+}).catch(err => {
+  console.error('MongoDB connection error:', err);
+});
 
 // Example route
 app.get('/', (req, res) => {
